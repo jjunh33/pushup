@@ -160,7 +160,7 @@ with mp_pose.Pose(
         cv2.rectangle(image, (5, 880), (270, 930), (255, 0, 0), -1)
         cv2.putText(image, "count:%d" % cnt, (25, 920), cv2.FONT_HERSHEY_PLAIN, 3,
                     (255, 255, 255), 5)
-        cv2.imshow('Pushup Counter', image)
+        # cv2.imshow('Pushup Counter', image)
         out.write(image)
         if cv2.waitKey(5) & 0xFF == 27:
             break
@@ -170,7 +170,7 @@ print(graph_x)
 print(graph_y)
 cap.release()
 out.release()
-cv2.destroyAllWindows()
+# cv2.destroyAllWindows()
 plt.plot(graph_x, graph_y)
 # plt.show()
 plt.savefig("result.png")
