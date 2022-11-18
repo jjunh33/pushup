@@ -3,8 +3,9 @@ from matplotlib import pyplot as plt
 import mediapipe as mp
 import numpy as np
 import time
-import os
 import base64
+import paho.mqtt.client as mqtt
+
 
 def angle(a, b, c):
     a = np.array(a)  # First
@@ -180,9 +181,13 @@ plt.plot(graph_x, graph_y)
 plt.savefig("result.png")
 with open('./result.png', 'rb') as img:
     base64_string = base64.b64encode(img.read())
-print("{\"count\": %d, \"time\": %d, \"max pace(5s)\": %d, \"min pace(5s)\": %d, \"img\": %s}" % (cnt, total_time, max(graph_y), min(graph_y), base64_string))
-# os.system(f"ffmpeg -i output.mp4 -vcodec libx264 {rightnow}.mp4")
-# os.system("rm -f output.mp4")
-# os.system(f"python upload.py --vid {rightnow}.mp4")
-# os.system(f"rm -f {rightnow}.mp4")
 
+ip = "3.34.50.139"
+client = mqtt.Client()
+client.connect(ip, 1883)
+client.loop_start()
+# common topic 으로 메세지 발행
+client.publish('exercise/result', "{\"count\": %d, \"time\": %d, \"max\": %d, \"min\": %d, \"img\": %s}" % (cnt, total_time, max(graph_y), min(graph_y), base64_string), 1)
+client.loop_stop()
+# 연결 종료
+client.disconnect()
